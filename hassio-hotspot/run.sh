@@ -31,6 +31,7 @@ BROADCAST=$(jq --raw-output ".broadcast" $CONFIG_PATH)
 INTERFACE=$(jq --raw-output ".interface" $CONFIG_PATH)
 INTERNET_IF=$(jq --raw-output ".internet_interface" $CONFIG_PATH)
 ALLOW_INTERNET=$(jq --raw-output ".allow_internet" $CONFIG_PATH)
+ALLOW_INTERNET_MAC_ADDRESSES=$(jq --raw-output '.allow_internet_mac_addresses | join(" ")' $CONFIG_PATH)
 HIDE_SSID=$(jq --raw-output ".hide_ssid" $CONFIG_PATH)
 
 DHCP_SERVER=$(jq --raw-output ".dhcp_enable" $CONFIG_PATH)
@@ -80,17 +81,35 @@ echo "Network interface set to ${INTERFACE}"
 RULE_3="POSTROUTING -o ${INTERNET_IF} -j MASQUERADE"
 RULE_4="FORWARD -i ${INTERNET_IF} -o ${INTERFACE} -m state --state RELATED,ESTABLISHED -j ACCEPT"
 RULE_5="FORWARD -i ${INTERFACE} -o ${INTERNET_IF} -j ACCEPT"
+RULE_6="FORWARD -i ${INTERFACE} -o ${INTERNET_IF}  -m mac --mac-source #MAC# -j ACCEPT"
+RULE_7="FORWARD -i ${INTERFACE} -o ${INTERNET_IF} -j DROP"
 
 echo "Deleting iptables"
 iptables -v -t nat -D $(echo ${RULE_3})
 iptables -v -D $(echo ${RULE_4})
-iptables -v -D $(echo ${RULE_5})
+if [ ${#ALLOW_INTERNET_MAC_ADDRESSES} -ge 1 ]; then
+    ALLOWED=($ALLOW_INTERNET_MAC_ADDRESSES)
+    for mac in "${ALLOWED[@]}"; do
+        echo iptables -v -D $(echo ${RULE_6/\#MAC\#/"$mac"})
+    done
+    echo iptables -v -D $(echo ${RULE_7})
+else
+    echo iptables -v -D $(echo ${RULE_5})
+fi
 
 if test ${ALLOW_INTERNET} = true; then
     echo "Configuring iptables for NAT"
     iptables -v -t nat -A $(echo ${RULE_3})
     iptables -v -A $(echo ${RULE_4})
-    iptables -v -A $(echo ${RULE_5})
+    if [ ${#ALLOW_INTERNET_MAC_ADDRESSES} -ge 1 ]; then
+        ALLOWED=($ALLOW_INTERNET_MAC_ADDRESSES)
+        for mac in "${ALLOWED[@]}"; do
+            echo iptables -v -A $(echo ${RULE_6/\#MAC\#/"$mac"})
+        done
+        echo iptables -v -A $(echo ${RULE_7})
+    else
+        echo iptables -v -A $(echo ${RULE_5})
+    fi
 fi
 
 
