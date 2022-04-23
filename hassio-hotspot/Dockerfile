@@ -23,6 +23,7 @@ RUN apk update && apk add --no-cache    \
 
 COPY hostapd.conf /
 COPY udhcpd.conf /etc/udhcpd.conf
+COPY chrony.conf /var/lib/chrony/chrony.conf
 COPY run.sh /
 RUN chmod a+x /run.sh
 
