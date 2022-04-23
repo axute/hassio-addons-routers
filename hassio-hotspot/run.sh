@@ -34,6 +34,7 @@ ALLOW_INTERNET=$(jq --raw-output ".allow_internet" $CONFIG_PATH)
 ALLOW_INTERNET_MAC_ADDRESSES=$(jq --raw-output '.allow_internet_mac_addresses | join(" ")' $CONFIG_PATH)
 HIDE_SSID=$(jq --raw-output ".hide_ssid" $CONFIG_PATH)
 STATIC_LEASES=$(jq --raw-output '.static_leases | join(" ")' $CONFIG_PATH)
+COUNTRY_CODE=$(jq --raw-output ".country_code" $CONFIG_PATH)
 
 DHCP_SERVER=$(jq --raw-output ".dhcp_enable" $CONFIG_PATH)
 DHCP_START=$(jq --raw-output ".dhcp_start" $CONFIG_PATH)
@@ -127,6 +128,10 @@ echo "" >> ${HCONFIG}
 if test ${HIDE_SSID} = true; then
     echo "Hidding SSID"
     echo "ignore_broadcast_ssid=1" >> ${HCONFIG}
+fi
+
+if [[ ${COUNTRY_CODE} != null ]]; then
+    echo "COUNTRY_CODE=${COUNTRY_CODE}" >> ${HCONFIG}
 fi
 
 # Setup interface
