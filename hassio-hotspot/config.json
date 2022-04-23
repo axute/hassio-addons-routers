@@ -1,6 +1,6 @@
 {
   "name": "Hassio Hotspot (badmikko)",
-  "version": "1.1.3-d",
+  "version": "1.1.3-e",
   "slug": "hassio-hotspot",
   "description": "Access point for your IoT devives with configurable network interface and DHCP server",
   "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
@@ -44,7 +44,8 @@
     "dhcp_router": "192.168.2.1",
     "static_leases": [],
     "hide_ssid": false,
-    "country_code": null
+    "country_code": null,
+    "ntp_enable": true
   },
   "schema": {
     "ssid": "str",
@@ -65,6 +66,7 @@
     "dhcp_router": "str",
     "static_leases": ["str"],
     "hide_ssid": "bool",
-    "country_code": "str"
+    "country_code": "str",
+    "ntp_enable": "bool"
   }
 } 
