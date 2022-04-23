@@ -43,7 +43,8 @@
     "dhcp_subnet": "255.255.255.0",
     "dhcp_router": "192.168.2.1",
     "static_leases": [],
-    "hide_ssid": false
+    "hide_ssid": false,
+    "country_code": null
   },
   "schema": {
     "ssid": "str",
@@ -63,6 +64,7 @@
     "dhcp_subnet": "str",
     "dhcp_router": "str",
     "static_leases": ["str"],
-    "hide_ssid": "bool"
+    "hide_ssid": "bool",
+    "country_code": "bool"
   }
 } 
