@@ -173,6 +173,7 @@ if test ${DHCP_SERVER} = true; then
 
     echo "Starting DHCP server..."
     udhcpd -f &
+    sleep 1
 fi
 
 if test ${NTP_SERVER} = true; then
@@ -185,6 +186,7 @@ if test ${NTP_SERVER} = true; then
 
     echo "Starting NTP server..."
     exec /usr/sbin/chronyd -d -f /var/lib/chrony/chrony.conf &
+    sleep 1
 fi
 
 
