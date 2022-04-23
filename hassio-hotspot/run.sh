@@ -33,6 +33,7 @@ INTERNET_IF=$(jq --raw-output ".internet_interface" $CONFIG_PATH)
 ALLOW_INTERNET=$(jq --raw-output ".allow_internet" $CONFIG_PATH)
 ALLOW_INTERNET_MAC_ADDRESSES=$(jq --raw-output '.allow_internet_mac_addresses | join(" ")' $CONFIG_PATH)
 HIDE_SSID=$(jq --raw-output ".hide_ssid" $CONFIG_PATH)
+STATIC_LEASES=$(jq --raw-output '.static_leases | join(" ")' $CONFIG_PATH)
 
 DHCP_SERVER=$(jq --raw-output ".dhcp_enable" $CONFIG_PATH)
 DHCP_START=$(jq --raw-output ".dhcp_start" $CONFIG_PATH)
@@ -155,6 +156,12 @@ if test ${DHCP_SERVER} = true; then
     echo "opt dns      ${DHCP_DNS}"      >> ${UCONFIG}
     echo "opt subnet   ${DHCP_SUBNET}"   >> ${UCONFIG}
     echo "opt router   ${DHCP_ROUTER}"   >> ${UCONFIG}
+    if [ ${#STATIC_LEASES} -ge 1 ]; then
+        LEASES=($STATIC_LEASES)
+        for entry in "${LEASES[@]}"; do
+            echo "static_lease" $(echo ${entry/=/" "})   >> ${UCONFIG}
+        done
+    fi
     echo ""                              >> ${UCONFIG}
 
     echo "Starting DHCP server..."
