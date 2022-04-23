@@ -43,6 +43,8 @@ DHCP_DNS=$(jq --raw-output ".dhcp_dns" $CONFIG_PATH)
 DHCP_SUBNET=$(jq --raw-output ".dhcp_subnet" $CONFIG_PATH)
 DHCP_ROUTER=$(jq --raw-output ".dhcp_router" $CONFIG_PATH)
 
+NTP_SERVER=$(jq --raw-output ".ntp_enable" $CONFIG_PATH)
+
 # Enforces required env variables
 required_vars=(SSID WPA_PASSPHRASE CHANNEL ADDRESS NETMASK BROADCAST)
 for required_var in "${required_vars[@]}"; do
@@ -172,6 +174,19 @@ if test ${DHCP_SERVER} = true; then
     echo "Starting DHCP server..."
     udhcpd -f &
 fi
+
+if test ${NTP_SERVER} = true; then
+    pidfile="/var/run/chronyd.pid"
+
+    if [ -f "$pidfile" ]
+    then
+        rm $pidfile
+    fi
+
+    echo "Starting NTP server..."
+    exec /usr/sbin/chronyd -d -f /var/lib/chrony/chrony.conf &
+fi
+
 
 sleep 1
 
