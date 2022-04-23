@@ -131,7 +131,7 @@ if test ${HIDE_SSID} = true; then
 fi
 
 if [[ ${COUNTRY_CODE} != null ]]; then
-    echo "COUNTRY_CODE=${COUNTRY_CODE}" >> ${HCONFIG}
+    echo "country_code=${COUNTRY_CODE}" >> ${HCONFIG}
 fi
 
 # Setup interface
