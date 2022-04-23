@@ -169,6 +169,9 @@ if test ${DHCP_SERVER} = true; then
             echo "static_lease" $(echo ${entry/=/" "})   >> ${UCONFIG}
         done
     fi
+    if test ${NTP_SERVER} = true; then
+        echo "opt ntpsrv   ${ADDRESS}"   >> ${UCONFIG}
+    fi
     echo ""                              >> ${UCONFIG}
 
     echo "Starting DHCP server..."
