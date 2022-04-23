@@ -65,6 +65,6 @@
     "dhcp_router": "str",
     "static_leases": ["str"],
     "hide_ssid": "bool",
-    "country_code": "bool"
+    "country_code": "str"
   }
 } 
