@@ -1,5 +1,10 @@
 # Changelog
 
+
+## [1.1.4]
+### Changed
+- Fix s6-overlay-suexec: fatal: can only run as pid 1 home assistant 2022.5 (thanks to @maivorbim)
+
 ## [1.1.3]
 ### Changed
 - Add avahi daemon to enable mDNS
