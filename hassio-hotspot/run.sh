@@ -15,10 +15,7 @@ term_handler(){
     exit 0
 }
 
-function echo_and_run {
-  echo "$" "$@"
-  eval $(printf '%q ' "$@") < /dev/tty
-}
+echo_and_run() { echo "\$ $*" ; "$@" ; }
 
 # Setup signal handlers
 trap 'term_handler' SIGTERM
@@ -97,16 +94,16 @@ RULE_6="FORWARD -i ${INTERFACE} -o ${INTERNET_IF}  -s #IP_ADDR# -j ACCEPT"
 RULE_7="FORWARD -i ${INTERFACE} -o ${INTERNET_IF} -j DROP"
 
 echo "Deleting iptables"
-iptables -v -t nat -D $(echo ${RULE_3})
-iptables -v -D $(echo ${RULE_4})
+echo_and_run iptables -v -t nat -D $(echo ${RULE_3})
+echo_and_run iptables -v -D $(echo ${RULE_4})
 if [ ${#ALLOW_INTERNET_IP_ADDRESSES} -ge 1 ]; then
     ALLOWED=($ALLOW_INTERNET_IP_ADDRESSES)
     for ip_addr in "${ALLOWED[@]}"; do
-        echo iptables -v -D $(echo ${RULE_6/\#IP_ADDR\#/"$ip_addr"})
+        echo_and_run iptables -v -D $(echo ${RULE_6/\#IP_ADDR\#/"$ip_addr"})
     done
-    echo iptables -v -D $(echo ${RULE_7})
+    echo_and_run iptables -v -D $(echo ${RULE_7})
 else
-    echo iptables -v -D $(echo ${RULE_5})
+    echo_and_run iptables -v -D $(echo ${RULE_5})
 fi
 
 if test ${ALLOW_INTERNET} = true; then
