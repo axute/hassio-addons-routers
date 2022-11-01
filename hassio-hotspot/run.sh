@@ -15,6 +15,11 @@ term_handler(){
     exit 0
 }
 
+function echo_and_run {
+  echo "$" "$@"
+  eval $(printf '%q ' "$@") < /dev/tty
+}
+
 # Setup signal handlers
 trap 'term_handler' SIGTERM
 
@@ -67,7 +72,7 @@ fi
 for OPTION in ${INTERFACES_AVAILABLE}; do
     if [[ ${INTERFACE} == ${OPTION} ]]; then
         UNKNOWN=false
-    fi 
+    fi
 done
 
 if [[ ${UNKNOWN} == true ]]; then
@@ -75,6 +80,9 @@ if [[ ${UNKNOWN} == true ]]; then
         echo >&2 "${INTERFACES_AVAILABLE}"
         exit 1
 fi
+
+echo "Preparing config folder"
+mkdir -p /config/.storage/hassio-hotspot
 
 echo "Set nmcli managed no"
 nmcli dev set ${INTERFACE} managed no
@@ -103,16 +111,16 @@ fi
 
 if test ${ALLOW_INTERNET} = true; then
     echo "Configuring iptables for NAT"
-    iptables -v -t nat -A $(echo ${RULE_3})
-    iptables -v -A $(echo ${RULE_4})
+    echo_and_run iptables -v -t nat -A $(echo ${RULE_3})
+    echo_and_run iptables -v -A $(echo ${RULE_4})
     if [ ${#ALLOW_INTERNET_IP_ADDRESSES} -ge 1 ]; then
         ALLOWED=($ALLOW_INTERNET_IP_ADDRESSES)
         for ip_addr in "${ALLOWED[@]}"; do
-            echo iptables -v -A $(echo ${RULE_6/\#IP_ADDR\#/"$ip_addr"})
+            echo_and_run iptables -v -A $(echo ${RULE_6/\#IP_ADDR\#/"$ip_addr"})
         done
-        echo iptables -v -A $(echo ${RULE_7})
+        echo_and_run iptables -v -A $(echo ${RULE_7})
     else
-        echo iptables -v -A $(echo ${RULE_5})
+        echo_and_run iptables -v -A $(echo ${RULE_5})
     fi
 fi
 
@@ -198,7 +206,7 @@ sleep 1
 echo "Starting HostAP daemon ..."
 hostapd ${HCONFIG} &
 
-while true; do 
+while true; do
     echo "Interface stats:"
     ifconfig | grep ${INTERFACE} -A6
     sleep 3600
