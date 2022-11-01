@@ -82,7 +82,7 @@ echo "Preparing config folder"
 mkdir -p /config/.storage/hassio-hotspot
 
 echo "Set nmcli managed no"
-nmcli dev set ${INTERFACE} managed no
+echo_and_run /usr/bin/nmcli dev set ${INTERFACE} managed no
 
 echo "Network interface set to ${INTERFACE}"
 
@@ -171,7 +171,7 @@ if test ${DHCP_SERVER} = true; then
     if [ ${#STATIC_LEASES} -ge 1 ]; then
         LEASES=($STATIC_LEASES)
         for entry in "${LEASES[@]}"; do
-            echo "static_lease" $(echo ${entry/=/" "})   >> ${UCONFIG}
+            echo "static_lease" $(echo ${entry//=/" "})   >> ${UCONFIG}
         done
     fi
     if test ${NTP_SERVER} = true; then
