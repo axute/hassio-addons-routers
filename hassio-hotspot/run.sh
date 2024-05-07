@@ -57,7 +57,7 @@ for required_var in "${required_vars[@]}"; do
 done
 
 
-INTERFACES_AVAILABLE="$(ifconfig -a | grep wl | cut -d ' ' -f '1')"
+INTERFACES_AVAILABLE="$(ifconfig -a | grep '^wl' | cut -d ':' -f '1')"
 UNKNOWN=true
 
 if [[ -z ${INTERFACE} ]]; then
