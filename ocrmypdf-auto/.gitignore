@@ -1,0 +1,20 @@
+# Makefile marker
+ocrmypdf-auto
+
+*~
+*.swp
+.vs
+
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache
+
+/.venv
+/.test_venv
+/env
+/testarchive
+/testconfig
+/testin
+/testout
+/testtemp

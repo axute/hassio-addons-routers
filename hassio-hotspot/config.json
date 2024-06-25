@@ -1,7 +1,7 @@
 {
   "name": "Hassio Hotspot (axute)",
   "version": "1.1.5",
-  "slug": "hassio-hotspot",
+  "slug": "axute-hotspot-axute",
   "description": "Access point for your IoT devives with configurable network interface and DHCP server",
   "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
   "url": "https://github.com/axute/hassio-addons-routers/tree/master/hassio-hotspot",

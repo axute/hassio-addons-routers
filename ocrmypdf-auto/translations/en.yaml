@@ -1,0 +1,7 @@
+configuration:
+  languages:
+    name: "Additional languages (besides English)"
+    description: "Additional languages (besides English) to install, given as a space-separated list of language abbreviations. All available languages can be found on the Ubuntu site. Example for German, Chinese - Simplified, and Italian: deu chi-sim ita"
+  notify_url:
+    name: "Notification URL"
+    description: "On a successful completion, a POST will be made to the given URL, with a JSON payload of {'pdf': '/output/doc.pdf', 'txt': '/output/doc.pdf.txt'} . The txt property will only be present if you add the --sidecar  option to the ocr.config file. This could be used to kick off additional processing, like indexing of the content or notifications."
