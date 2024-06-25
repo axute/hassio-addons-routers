@@ -1,0 +1,27 @@
+{
+  "name": "Hassio Traefik Exporter (axute)",
+  "version": "1.0.0",
+  "slug": "hassio-traefik-exporter",
+  "description": "Exports your traefik certs to pem files",
+  "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+  "url": "https://github.com/axute/hassio-addons-routers/tree/master/traefik-certificate-exporter",
+  "startup": "system",
+  "boot": "auto",
+  "host_network": true,
+  "apparmor": false,
+  "host_dbus": true,
+  "full_access": true,
+  "devices": [
+    "/dev/mem"
+  ],
+  "map": [
+    "ssl:rw"
+  ],
+  "init": false,
+  "options": {
+    "traefik_dir": "addons_traefik"
+  },
+  "schema": {
+    "traefik_dir": "str"
+  }
+}
