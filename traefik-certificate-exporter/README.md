@@ -7,10 +7,14 @@ Tool to extract Let's Encrypt certificates from Traefik's ACME storage file. Can
 ## Output
 ```
 /ssl/
-    example.com.crt
-    example.com.key
-    example.com.chain.pem
-    sub.example.nl.crt
-    sub.example.nl.key
-    sub.example.nl.chain.pem
+    example.com/
+        cert.pem
+        chain.pem
+        fullchain.pem
+        privkey.pem
+    sub.example.nl/
+        cert.pem
+        chain.pem
+        fullchain.pem
+        privkey.pem
 ```
